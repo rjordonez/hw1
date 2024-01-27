@@ -20,26 +20,26 @@ int main(int argc, char* argv[])
   cout << "Hello: ";
     Node* head = new Node(1, new Node(2, new Node(3, new Node(4, nullptr))));
 
-    // Splitting the list
+
     Node* odds = nullptr;
     Node* evens = nullptr;
     split(head, odds, evens);
 
-    // Printing odd values
+
     cout << "Odd values: ";
     for (Node* curr = odds; curr != nullptr; curr = curr->next) {
         cout << curr->value << " ";
     }
     cout << endl;
 
-    // Printing even values
+
     cout << "Even values: ";
     for (Node* curr = evens; curr != nullptr; curr = curr->next) {
         cout << curr->value << " ";
     }
     cout << endl;
 
-    // Clean up
+
     delete head;
     delete odds;
     delete evens;

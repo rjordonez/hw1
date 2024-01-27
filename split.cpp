@@ -25,19 +25,19 @@ if (in == NULL) {
         return;
     }
 
-    // Extract the first node from the input list
+    
     Node* currentNode = in;
     in = in->next;
 
-    // Decide whether the node is odd or even and insert it to the appropriate list
+    
     if (currentNode->value % 2 == 0) {
         insertAtFront(evens, currentNode);
     } else {
         insertAtFront(odds, currentNode);
     }
 
-    // Recursive call
+    
     split(in, odds, evens);
 }
 
-/* If you needed a helper function, write it here */
+

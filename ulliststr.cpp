@@ -26,7 +26,6 @@ size_t ULListStr::size() const
 
 // WRITE YOUR CODE HERE
 void ULListStr::push_back(const std::string& val) {
-  // If the list is empty or the last node's array is full, create a new node
   if (tail_ == NULL || tail_->last == ARRSIZE) {
     Item* newItem = new Item();
     if (tail_ != NULL) {
@@ -41,31 +40,31 @@ void ULListStr::push_back(const std::string& val) {
     tail_->first = 0;
     tail_->val[0] = val;
   } else {
-    // Otherwise, add the value to the current tail node's array
     tail_->val[tail_->last++] = val;
   }
   size_++;
 }
 
 void ULListStr::push_front(const std::string& val) {
-  // If the list is empty or the first node's array is full from the front, create a new node
-  if (head_ == NULL || head_->first == 0) {
+  if (head_ != NULL && head_->first > 0) {
+    head_->val[--head_->first] = val;
+  } else {
     Item* newItem = new Item();
+    newItem->val[ARRSIZE - 1] = val; 
+    newItem->first = ARRSIZE - 1;
+    newItem->last = ARRSIZE; 
+
     if (head_ != NULL) {
-      head_->prev = newItem;
       newItem->next = head_;
+      head_->prev = newItem;
     }
+
     head_ = newItem;
     if (tail_ == NULL) {
       tail_ = newItem;
     }
-    head_->first = ARRSIZE - 1; // Start at the end of the array
-    head_->last = ARRSIZE;
-    head_->val[ARRSIZE - 1] = val;
-  } else {
-    // Otherwise, add the value to the current head node's array
-    head_->val[--head_->first] = val;
   }
+
   size_++;
 }
 
@@ -82,7 +81,7 @@ void ULListStr::pop_back() {
     if (tail_) {
       tail_->next = NULL;
     } else {
-      head_ = NULL; // List is now empty
+      head_ = NULL; 
     }
   }
 }
@@ -100,7 +99,7 @@ void ULListStr::pop_front() {
     if (head_) {
       head_->prev = NULL;
     } else {
-      tail_ = NULL; // List is now empty
+      tail_ = NULL; 
     }
   }
 }
@@ -123,17 +122,24 @@ std::string const & ULListStr::front() const {
 
 std::string* ULListStr::getValAtLoc(size_t loc) const {
   if (loc >= size_) {
-    return NULL;
+    return NULL; 
   }
+
   Item* current = head_;
+  size_t indexInCurrentItem = 0;
+
   while (current != NULL) {
-    if (loc < (current->last - current->first)) {
-      return &current->val[current->first + loc];
+    size_t itemCount = current->last - current->first;
+    if (loc < indexInCurrentItem + itemCount) {
+      
+      size_t actualIndex = loc - indexInCurrentItem + current->first;
+      return &current->val[actualIndex];
     }
-    loc -= (current->last - current->first);
+    indexInCurrentItem += itemCount;
     current = current->next;
   }
-  return NULL; // Should not reach here if loc is valid
+
+  return NULL;
 }
 
 
